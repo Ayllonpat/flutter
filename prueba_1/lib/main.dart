@@ -66,7 +66,39 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+
+      if (_counter == 10) {
+      _showCongratulationDialog();
+    }
     });
+  }
+  void _resetCounter() {
+  setState(() {
+    _counter = 0;
+  });
+
+  
+}
+void _showCongratulationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("¡Enhorabuena!"),
+          content: const Text("¡Has llegado a 10!"),
+          backgroundColor: Colors.green,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cerrar"),
+              
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -117,10 +149,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: SizedBox(
+        width: 360,
+        height: 100,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: _incrementCounter,
+                tooltip: 'Increment',
+                child: const Icon(Icons.add),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: FloatingActionButton(
+                onPressed: _resetCounter,
+                tooltip: 'Reset',
+                backgroundColor: Colors.red,
+                child: const Icon(Icons.refresh),
+              ),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
