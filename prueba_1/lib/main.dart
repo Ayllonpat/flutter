@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 40, 23, 70)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Contador'),
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
 
-      if (_counter == 10) {
+      if (_counter % 10 == 0) {
       _showCongratulationDialog();
     }
     });
@@ -80,19 +80,23 @@ class _MyHomePageState extends State<MyHomePage> {
   
 }
 void _showCongratulationDialog() {
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("¡Enhorabuena!"),
-          content: const Text("¡Has llegado a 10!"),
+          content: Text("¡Has llegado a $_counter!"),
           backgroundColor: Colors.green,
+          
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("Cerrar"),
+              child: const Text("Cerrar",
+              ),
+              
               
             ),
           ],
@@ -110,6 +114,7 @@ void _showCongratulationDialog() {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 233, 212, 255),
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -122,6 +127,7 @@ void _showCongratulationDialog() {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
+        
         child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
@@ -136,16 +142,16 @@ void _showCongratulationDialog() {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
+          
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Has pulsado el botón esta cantidad de veces:',
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            Text('hola'),
           ],
         ),
       ),
@@ -159,7 +165,9 @@ void _showCongratulationDialog() {
               child: FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
-                child: const Icon(Icons.add),
+                backgroundColor: const Color.fromARGB(255, 88, 39, 110),
+                child: const Icon(Icons.add,
+                color: Colors.white,),
               ),
             ),
             Align(
@@ -168,7 +176,8 @@ void _showCongratulationDialog() {
                 onPressed: _resetCounter,
                 tooltip: 'Reset',
                 backgroundColor: Colors.red,
-                child: const Icon(Icons.refresh),
+                child: const Icon(Icons.refresh,
+                color: Colors.white,),
               ),
             ),
           ],
