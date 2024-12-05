@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_1/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 40, 23, 70)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Contador'),
+      home: const Login(),
       
     );
   }
@@ -146,7 +147,7 @@ void _showCongratulationDialog() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Has pulsado el botón esta cantidad de veces:',
+              'Has pulsado el botón esta cantidad de veces:',style: TextStyle(color: Colors.white),
             ),
             Text(
               '$_counter',
@@ -158,10 +159,14 @@ void _showCongratulationDialog() {
       floatingActionButton: SizedBox(
         width: 360,
         height: 100,
-        child: Stack(
+        
+        child:Container(
+          
+          color: Colors.yellow,
+          child:  Stack(
           children: [
             Align(
-              alignment: Alignment.bottomRight,
+              alignment: Alignment.bottomRight,              
               child: FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
@@ -182,6 +187,9 @@ void _showCongratulationDialog() {
             ),
           ],
         ),
+        ), 
+        
+       
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
