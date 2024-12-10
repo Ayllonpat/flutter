@@ -68,10 +68,10 @@ class _LoginState extends State<Login> {
                       const Text('Already have a Path account?'),
                       OutlinedButton(
                         onPressed: () {},
-                        child: const Text('Log in'),
+                        child: const Text('Log in', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(220, 50), 
-                        
+                          iconColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),    
