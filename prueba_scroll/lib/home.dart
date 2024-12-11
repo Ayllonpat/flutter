@@ -8,30 +8,54 @@ class HomeActores extends StatelessWidget {
     return Scaffold(
         
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+       
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
             Container(
                 width: double.infinity,
                 height: 100,
-                margin: EdgeInsets.only(top: 30),
-                child: Row(
+                margin: EdgeInsets.only(top: 80, left: 35),
+                child: Column(
                     children: [
-                        RichText(text: TextSpan(
-                        text: 'Best Iranian Actors', style: TextStyle(fontWeight: FontWeight.bold,
+                      Row(
+                        children: [
+                          Text('Best Iranian Actors', style: TextStyle(fontWeight: FontWeight.bold,
                         color: Colors.black, fontSize: 25),
                         
-                        )
                         ),
-                        RichText(text: TextSpan(
-                            text: ' and Actresses', style: TextStyle(fontWeight: FontWeight.bold,
+                       
+                        ],
+                      ),
+                       Row(
+                          children: [
+                            Text(
+                            'and Actresses', style: TextStyle(fontWeight: FontWeight.bold,
                             color: Colors.black, fontSize: 25),
                             
                         )
-                        
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                            'March 2020', style: TextStyle(
+                            color: Colors.grey, fontSize: 12),
+                            
                         )
+                          ],
+                        ),
                     ],
                 )
                 ,
+            ),
+            Container(
+              child: Row(
+                children: [
+                  Container(
+                    
+                  )
+                ],
+              ),
             )
             
         ],
