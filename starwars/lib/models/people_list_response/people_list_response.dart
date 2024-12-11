@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'people.dart';
 
 class PeopleListResponse {
@@ -8,21 +10,33 @@ class PeopleListResponse {
 
   PeopleListResponse({this.count, this.next, this.previous, this.results});
 
-  factory PeopleListResponse.fromJson(Map<String, dynamic> json) {
+  factory PeopleListResponse.fromMap(Map<String, dynamic> data) {
     return PeopleListResponse(
-      count: json['count'] as int?,
-      next: json['next'] as String?,
-      previous: json['previous'] as dynamic,
-      results: (json['results'] as List<dynamic>?)
-          ?.map((e) => People.fromJson(e as Map<String, dynamic>))
+      count: data['count'] as int?,
+      next: data['next'] as String?,
+      previous: data['previous'] as dynamic,
+      results: (data['results'] as List<dynamic>?)
+          ?.map((e) => People.fromMap(e as Map<String, dynamic>))
           .toList(),
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'count': count,
         'next': next,
         'previous': previous,
-        'results': results?.map((e) => e.toJson()).toList(),
+        'results': results?.map((e) => e.toMap()).toList(),
       };
+
+  /// `dart:convert`
+  ///
+  /// Parses the string and returns the resulting Json object as [PeopleResponse].
+  factory PeopleListResponse.fromJson(String data) {
+    return PeopleListResponse.fromMap(json.decode(data) as Map<String, dynamic>);
+  }
+
+  /// `dart:convert`
+  ///
+  /// Converts [PeopleResponse] to a JSON string.
+  String toJson() => json.encode(toMap());
 }
