@@ -24,8 +24,8 @@ class _PeopleScreenState extends State<PeopleScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 19, 18, 18),
       appBar: AppBar(
-        title: const Text('StarWars', style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),),
-        backgroundColor: Colors.black,
+        title: const Text('StarWars', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Caudex'),),
+        backgroundColor: const Color.fromARGB(255, 1, 22, 61),
       ),
       body: FutureBuilder<PeopleListResponse>(
         future: peopleResponse,
@@ -34,7 +34,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
             return Column(
               
               children: [
-                const Text('Personajes', style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold,),),
+                const Text('Personajes', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
                 SizedBox(
                   width: double.infinity,
                   height: 700,
@@ -77,23 +77,51 @@ class _PeopleScreenState extends State<PeopleScreen> {
             width: 300,
             padding: EdgeInsets.only(top: 50, bottom: 60),
             margin: EdgeInsets.only(left: 43,),
+            decoration: BoxDecoration(
+              
+            ),
             child:Card(
               shape: BeveledRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-                  child: Container(                   
-                    height: 30,
+                  child: Container(                 
                     decoration: BoxDecoration(
-                      color: Colors.yellow,
+                      image: DecorationImage(
+                        colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
+                        alignment: Alignment.topCenter,
+                        image: NetworkImage("https://starwars-visualguide.com/assets/img/characters/${index + 1}.jpg"), 
+                        ),
+                      color: const Color.fromARGB(255, 3, 3, 3),
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
-                    child: Column(
+                    child: Row(
                       children: [
-                        Row(
+                        Text(peopleResponse.results![index].name!, style: TextStyle(color: Colors.white),),
+                        SizedBox(
+                          height: 100,
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(peopleResponse.results![index].name!)
+                            Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    
+                                    Text(peopleResponse.results![index].birthYear!, style: TextStyle(color: Colors.white),),
+                                    Text(peopleResponse.results![index].gender!, style: TextStyle(color: Colors.white),)
+                                  ],
+                                ),
+                                Column(
+
+                                )
+                              ],
+                            ),
+                            
                           ],
-                        )
+                        ),
+                        ),
+
+                        
                       ],
                     ),
                   ),
