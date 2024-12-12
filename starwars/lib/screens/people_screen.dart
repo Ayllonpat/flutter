@@ -12,11 +12,25 @@ class PeopleScreen extends StatefulWidget {
 
 class _PeopleScreenState extends State<PeopleScreen> {
   late Future<PeopleListResponse> peopleResponse;
+  final PageController _pageController = PageController(viewportFraction: 0.7);
+  double _currentPage = 0.0;
 
   @override
   void initState() {
     super.initState();
     peopleResponse = getPeople();
+    
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page ?? 0.0;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -24,34 +38,53 @@ class _PeopleScreenState extends State<PeopleScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 19, 18, 18),
       appBar: AppBar(
-        title: const Text('StarWars', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Caudex'),),
-        backgroundColor: const Color.fromARGB(255, 1, 22, 61),
+        title: const Text(
+          'StarWars',
+          style: TextStyle(
+            color: Colors.yellow,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'StarWars',
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       ),
       body: FutureBuilder<PeopleListResponse>(
         future: peopleResponse,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
-              
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Personajes', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20.0, left: 16.0),
+                  child: Text(
+                    'Personajes',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'StarWars',
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: double.infinity,
-                  height: 700,
-                  child: _buildPeopleList(snapshot.data!),
-                )
-                
+                  height: 650,
+                  child: _buildPeopleCarousel(snapshot.data!),
+                ),
               ],
             );
-
-            
-            
           } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
+            return Text('${snapshot.error}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'StarWars',
+                ));
           }
 
-          // By default, show a loading spinner.
-          return const CircularProgressIndicator();
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -63,72 +96,117 @@ class _PeopleScreenState extends State<PeopleScreen> {
     if (response.statusCode == 200) {
       return PeopleListResponse.fromJson(response.body);
     } else {
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load people');
     }
   }
 
-  Widget _buildPeopleList(PeopleListResponse peopleResponse) {
-    return ListView.builder(
-        itemCount: peopleResponse.results!.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return Container(     
-            height: 30,
-            width: 300,
-            padding: EdgeInsets.only(top: 50, bottom: 60),
-            margin: EdgeInsets.only(left: 43,),
+  Widget _buildPeopleCarousel(PeopleListResponse peopleResponse) {
+    return PageView.builder(
+      controller: _pageController,
+      itemCount: peopleResponse.results!.length,
+      itemBuilder: (context, index) {
+        return _buildCard(peopleResponse, index);
+      },
+    );
+  }
+
+  Widget _buildCard(PeopleListResponse peopleResponse, int index) {
+    double scale = 1.0;
+    double distance = (_currentPage - index);
+
+    scale = (1 - (distance * 0.2)).clamp(0.8, 1.0);
+
+    return Transform.scale(
+      scale: scale,
+      child: Container(
+        height: 30,
+        width: 300,
+        padding: const EdgeInsets.only(top: 50, bottom: 60),
+        margin: const EdgeInsets.only(left: 20),
+        child: Card(
+          color: Colors.black,
+          shape: BeveledRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
             decoration: BoxDecoration(
-              
-            ),
-            child:Card(
-              shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
+                alignment: Alignment.topCenter,
+                image: NetworkImage(
+                    "https://starwars-visualguide.com/assets/img/characters/${index + 1}.jpg"),
               ),
-                  child: Container(                 
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
-                        alignment: Alignment.topCenter,
-                        image: NetworkImage("https://starwars-visualguide.com/assets/img/characters/${index + 1}.jpg"), 
+              color: const Color.fromARGB(255, 31, 30, 30),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    peopleResponse.results![index].name!,
+                    style: const TextStyle(
+                      color: Colors.yellow,
+                      fontFamily: 'StarWars',
+                      fontSize: 18.0,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1.5, 1.5),
+                          blurRadius: 1.0,
+                          color: Colors.black,
                         ),
-                      color: const Color.fromARGB(255, 3, 3, 3),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(peopleResponse.results![index].name!, style: TextStyle(color: Colors.white),),
-                        SizedBox(
-                          height: 100,
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    
-                                    Text(peopleResponse.results![index].birthYear!, style: TextStyle(color: Colors.white),),
-                                    Text(peopleResponse.results![index].gender!, style: TextStyle(color: Colors.white),)
-                                  ],
-                                ),
-                                Column(
-
-                                )
-                              ],
-                            ),
-                            
-                          ],
-                        ),
-                        ),
-
-                        
                       ],
                     ),
                   ),
-                ),
-          );      
-        });
-
-        
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Birth Year: ${peopleResponse.results![index].birthYear!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'StarWars',
+                        ),
+                      ),
+                      Text(
+                        'Gender: ${peopleResponse.results![index].gender!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'StarWars',
+                        ),
+                      ),
+                      Text(
+                        'Height: ${peopleResponse.results![index].height!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'StarWars',
+                        ),
+                      ),
+                      Text(
+                        'Hair Color: ${peopleResponse.results![index].hairColor!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'StarWars',
+                        ),
+                      ),
+                      Text(
+                        'Eye Color: ${peopleResponse.results![index].eyeColor!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'StarWars',
+                        ),
+                      ),
+                      const SizedBox(height: 60),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

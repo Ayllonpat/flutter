@@ -80,11 +80,13 @@ flutter:
   fonts:
       - family: Caudex
         fonts:
-          - asset: fonts/Caudex-Regular.ttf
-          - asset: fonts/Caudex-Italic.ttf
+          - asset: fonts/Caudex/Caudex-Regular.ttf
+          - asset: fonts/Caudex/Caudex-Italic.ttf
             style: italic
-          - asset: fonts/Caudex-Bold.ttf
-            
+          - asset: fonts/Caudex/Caudex-Bold.ttf
+      - family: StarWars
+        fonts:
+          - asset: fonts/starjedi/StarJedi.ttf    
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
