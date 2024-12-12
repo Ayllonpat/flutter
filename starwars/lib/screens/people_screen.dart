@@ -22,15 +22,30 @@ class _PeopleScreenState extends State<PeopleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 19, 18, 18),
       appBar: AppBar(
-        title: const Text('Personajes StarWars', style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),),
+        title: const Text('StarWars', style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),),
         backgroundColor: Colors.black,
       ),
       body: FutureBuilder<PeopleListResponse>(
         future: peopleResponse,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildPeopleList(snapshot.data!);
+            return Column(
+              
+              children: [
+                const Text('Personajes', style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold,),),
+                SizedBox(
+                  width: double.infinity,
+                  height: 700,
+                  child: _buildPeopleList(snapshot.data!),
+                )
+                
+              ],
+            );
+
+            
+            
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -55,8 +70,37 @@ class _PeopleScreenState extends State<PeopleScreen> {
   Widget _buildPeopleList(PeopleListResponse peopleResponse) {
     return ListView.builder(
         itemCount: peopleResponse.results!.length,
+        scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return Text(peopleResponse.results![index].name!);
+          return Container(     
+            height: 30,
+            width: 300,
+            padding: EdgeInsets.only(top: 50, bottom: 60),
+            margin: EdgeInsets.only(left: 43,),
+            child:Card(
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+                  child: Container(                   
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(peopleResponse.results![index].name!)
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+          );      
         });
+
+        
   }
 }
