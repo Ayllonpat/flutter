@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:starwars/models/people_list_response/people.dart';
 import 'package:starwars/screens/people_details_screen.dart';
 import 'package:starwars/screens/people_screen.dart';
 
@@ -36,8 +37,19 @@ class MyApp extends StatelessWidget {
       
       routes: {
       '/': (context) => PeopleScreen(),
-      '/people_details': (context) => PeopleDetailsScreen(),
+      
     },
+     onGenerateRoute: (settings) {
+        if (settings.name == '/people_details') {
+          
+          final People person = settings.arguments as People;
+
+          return MaterialPageRoute(
+            builder: (context) => PeopleDetailsScreen(person: person),
+          );
+        }
+        return null; 
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:starwars/models/people_list_response/people_list_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:starwars/screens/people_details_screen.dart';
 
 class PeopleScreen extends StatefulWidget {
   const PeopleScreen({super.key});
@@ -19,7 +20,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
   void initState() {
     super.initState();
     peopleResponse = getPeople();
-    
+
     _pageController.addListener(() {
       setState(() {
         _currentPage = _pageController.page ?? 0.0;
@@ -39,25 +40,24 @@ class _PeopleScreenState extends State<PeopleScreen> {
       backgroundColor: const Color.fromARGB(255, 19, 18, 18),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        title: Hero(tag: Row, child: const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                  Text(
-                    'StarWars',
-                    style: TextStyle(
-                      color: Colors.yellow,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'StarWars',
-                    ),
-                  ),
-                  Image(image: AssetImage(
-                 'assets/images/estrellita.png',),
-                  width: 40,  
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              'StarWars',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'StarWars',
               ),
-            ],
-          ),
-          )
-         
+            ),
+            const SizedBox(width: 8),
+            const Image(
+              image: AssetImage('assets/images/estrellita.png'),
+              width: 40,
+            ),
+          ],
+        ),
       ),
       body: FutureBuilder<PeopleListResponse>(
         future: peopleResponse,
@@ -132,8 +132,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
     return Transform.scale(
       scale: scale,
       child: Container(
-        height: 30,
-        width: 300,
         padding: const EdgeInsets.only(top: 50, bottom: 60),
         margin: const EdgeInsets.only(left: 20, right: 20),
         child: Card(
@@ -143,12 +141,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
           ),
           child: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
-                alignment: Alignment.topCenter,
-                image: NetworkImage(
-                    "https://starwars-visualguide.com/assets/img/characters/${index + 1}.jpg"),
-              ),
               color: const Color.fromARGB(255, 31, 30, 30),
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
@@ -158,6 +150,28 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Hero(
+                    tag: peopleResponse.results![index].name!,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        width: double.infinity, 
+                        height: 300, 
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0), 
+                          image: DecorationImage(
+                            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
+                            alignment: Alignment.topCenter,
+                            image: NetworkImage(
+                              "https://starwars-visualguide.com/assets/img/characters/${index + 1}.jpg",
+                            ),
+                            fit: BoxFit.cover, 
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  
                   Text(
                     peopleResponse.results![index].name!,
                     style: const TextStyle(
@@ -181,7 +195,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
-                          
                         ),
                       ),
                       Text(
@@ -189,7 +202,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
-                          
                         ),
                       ),
                       Text(
@@ -197,34 +209,40 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
-                          
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       Container(
-                        padding: EdgeInsets.only(left: 55),
+                        padding: const EdgeInsets.only(left: 55),
                         child: ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/people_details');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellow
-                            ),
-                            label: const Text('ver más',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PeopleDetailsScreen(
+                                  person: peopleResponse.results![index],
+                                ),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.yellow,
+                          ),
+                          label: const Text(
+                            'ver más',
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'StarWars',
-                              fontSize: 13.2
-                              ),
+                              fontSize: 13.2,
                             ),
-                            icon: Image(image: AssetImage(
-                              'assets/images/darth-vader.png'
-                            ),
+                          ),
+                          icon: const Image(
+                            image: AssetImage('assets/images/darth-vader.png'),
                             width: 20,
-                            alignment: Alignment.centerRight,),
+                            alignment: Alignment.centerRight,
+                          ),
                         ),
                       ),
-                      
                       const SizedBox(height: 30),
                     ],
                   ),
