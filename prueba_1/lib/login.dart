@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image(
-                  image: AssetImage('images/path_logo.png'),
+                  image: AssetImage("images/path_logo.png"),
                   width: 200,
                   ),
                   Text('Beutiful, Private Sharing', style: TextStyle(color: Colors.white)),

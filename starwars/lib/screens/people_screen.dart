@@ -38,41 +38,54 @@ class _PeopleScreenState extends State<PeopleScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 19, 18, 18),
       appBar: AppBar(
-        title: const Text(
-          'StarWars',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'StarWars',
-          ),
-        ),
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        title: Hero(tag: Row, child: const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                  Text(
+                    'StarWars',
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'StarWars',
+                    ),
+                  ),
+                  Image(image: AssetImage(
+                 'assets/images/estrellita.png',),
+                  width: 40,  
+              ),
+            ],
+          ),
+          )
+         
       ),
       body: FutureBuilder<PeopleListResponse>(
         future: peopleResponse,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 16.0),
-                  child: Text(
-                    'Personajes',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'StarWars',
-                      fontSize: 24,
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20.0, left: 16.0),
+                    child: Text(
+                      'Personajes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'StarWars',
+                        fontSize: 24,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 650,
-                  child: _buildPeopleCarousel(snapshot.data!),
-                ),
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    height: 650,
+                    child: _buildPeopleCarousel(snapshot.data!),
+                  ),
+                ],
+              ),
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}',
@@ -122,7 +135,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
         height: 30,
         width: 300,
         padding: const EdgeInsets.only(top: 50, bottom: 60),
-        margin: const EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20, right: 20),
         child: Card(
           color: Colors.black,
           shape: BeveledRectangleBorder(
@@ -140,7 +153,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20),
+              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,6 +181,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
+                          
                         ),
                       ),
                       Text(
@@ -175,6 +189,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
+                          
                         ),
                       ),
                       Text(
@@ -182,23 +197,35 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'StarWars',
+                          
                         ),
                       ),
-                      Text(
-                        'Hair Color: ${peopleResponse.results![index].hairColor!}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'StarWars',
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: EdgeInsets.only(left: 55),
+                        child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/people_details');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow
+                            ),
+                            label: const Text('ver más',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'StarWars',
+                              fontSize: 13.2
+                              ),
+                            ),
+                            icon: Image(image: AssetImage(
+                              'assets/images/darth-vader.png'
+                            ),
+                            width: 20,
+                            alignment: Alignment.centerRight,),
                         ),
                       ),
-                      Text(
-                        'Eye Color: ${peopleResponse.results![index].eyeColor!}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'StarWars',
-                        ),
-                      ),
-                      const SizedBox(height: 60),
+                      
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ],
